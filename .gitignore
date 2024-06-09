@@ -18,8 +18,10 @@
 /apache2/ssl/*.csr
 /apache2/ssl/*.org
 
+/.application/*
+
 /.devcontainer/*
 !/.devcontainer/devcontainer.example.json
 !/.devcontainer/docker-compose.extend-example.yml
 
-docker-compose.custom.yml
+docker-compose-*.yml
