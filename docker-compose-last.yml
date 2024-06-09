@@ -1,0 +1,322 @@
+services:
+    ####################################################################################################
+    # PHP
+    ####################################################################################################
+    php1:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php1
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+    php2:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php2
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+    php3:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php3
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+    php4:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php4
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+    php5:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php5
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+    php6:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php6
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+    php7:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php7
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+    php8:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php8
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+    php9:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php9
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+    php10:
+        build: .docker/php
+        volumes:
+            - .application:/var/www:cached
+        networks:
+            - backend
+        environment:
+            - PHP_FPM_PORT=9000
+            - PHP_SERVER_NAME=php10
+        # deploy:
+        #     replicas: 4
+        #     update_config:
+        #         parallelism: 1
+        #     restart_policy:
+        #         condition: on-failure
+
+    ####################################################################################################
+    # Nginx
+    ####################################################################################################
+    nginx:
+        image: nginx
+        ports:
+            - 80:80
+        volumes:
+            - .application:/var/www
+            - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - .docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - php1
+            - php2
+            - php3
+            - php4
+            - php5
+            - php6
+            - php7
+            - php8
+            - php9
+            - php10
+        networks:
+            - frontend
+            - backend
+
+    ####################################################################################################
+    # HAProxy
+    ####################################################################################################
+    # haproxy:
+    #     build: .docker/haproxy
+    #     ports:
+    #         - 8404:8404
+    #         - 9001:9001  # Expose HAProxy stats on this port
+    #     volumes:
+    #         - .docker/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    #         - /var/run/docker.sock:/var/run/docker.sock
+    #     networks:
+    #         - frontend
+    #         - backend
+    #     depends_on:
+    #         - php1
+    #         - php2
+    #         - php3
+    #         - db
+    #         - slave1
+    #         - slave2
+
+    ####################################################################################################
+    # DATABASE (Mariadb) REPLIKA
+    ####################################################################################################
+    db:
+        image: mariadb:10.11
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: db_laradoc
+            MYSQL_USER: db_user
+            MYSQL_PASSWORD: dbpass
+        volumes:
+            - .docker/logs/master:/var/log/mysql/
+            - .docker/db/db_master_data:/var/lib/mysql
+            - .docker/mysql/master/my.cnf:/etc/mysql/my.cnf
+            - .docker/db/sql/master:/docker-entrypoint-initdb.d
+        networks:
+            - backend
+
+    slave1:
+        image: mariadb:10.11
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_USER: db_user
+            MYSQL_PASSWORD: dbpass
+        volumes:
+            - .docker/logs/slave1:/var/log/mysql
+            - .docker/db/db_slave1_data:/var/lib/mysql
+            - .docker/mysql/slave1/my.cnf:/etc/mysql/my.cnf
+            - .docker/db/sql/slave1:/docker-entrypoint-initdb.d
+        networks:
+            - backend
+        depends_on:
+            - db
+
+    slave2:
+        image: mariadb:10.11
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_USER: db_user
+            MYSQL_PASSWORD: dbpass
+        volumes:
+            - .docker/logs/slave2:/var/log/mysql
+            - .docker/db/db_slave2_data:/var/lib/mysql
+            - .docker/mysql/slave2/my.cnf:/etc/mysql/my.cnf
+            - .docker/db/sql/slave2:/docker-entrypoint-initdb.d
+        networks:
+            - backend
+        depends_on:
+            - db
+
+    ####################################################################################################
+    # phpMyAdmin
+    ####################################################################################################
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - 8080:80
+        links:
+            - db
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+        volumes:
+            - .docker/phpmyadmin/sessions:/sessions
+        networks:
+            - backend
+
+    ####################################################################################################
+    # Adminer
+    ####################################################################################################
+    adminer:
+        image: adminer
+        ports:
+            - 9090:8080
+        depends_on:
+            - db
+        networks:
+            - backend
+
+    ####################################################################################################
+    # Mailpit
+    ####################################################################################################
+    mail:
+        image: axllent/mailpit:latest
+        ports:
+            - 8025:8025
+            - 1025:1025
+        networks:
+            - backend
+
+    ####################################################################################################
+    # Redis
+    ####################################################################################################
+    redis:
+        image: redis:latest
+        command: redis-server --appendonly yes
+        volumes:
+            - .docker/redis/data:/data
+        ports:
+            - 6380:6379
+        networks:
+            - backend
+    
+    ### Portainer ################################################
+    portainer:
+        build:
+            context: .docker/portainer
+        volumes:
+            - .docker/portainer/portainer_data:/data
+            - /var/run/docker.sock:/var/run/docker.sock
+        ports:
+            - 9080:9000
+        networks:
+            - backend
+
+networks:
+    frontend:
+    backend:

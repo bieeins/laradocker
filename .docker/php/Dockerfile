@@ -2,11 +2,13 @@ FROM php:8.3-fpm
 
 COPY php.ini /usr/local/etc/php/
 COPY docker.conf /usr/local/etc/php-fpm.d/docker.conf
+# COPY www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY .bashrc /root/
 
 # mix
 RUN apt-get update \
   && apt-get install -y build-essential zlib1g-dev default-mysql-client curl gnupg procps vim git unzip libzip-dev libpq-dev \
+  net-tools iputils-ping htop nano \
   && docker-php-ext-install zip pdo_mysql pdo_pgsql pgsql
 
 # intl
