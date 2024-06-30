@@ -12,6 +12,11 @@ RUN if [ ${CHANGE_SOURCE} = true ]; then \
     sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories \
 ;fi
 
+ARG TZ=UTC
+ENV TZ ${TZ}
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN apk update \
     && apk upgrade \
     && apk --update add logrotate \
@@ -21,8 +26,8 @@ RUN apk update \
 RUN apk add --no-cache curl
 
 RUN set -x ; \
-    addgroup -g 82 -S www-data ; \
-    adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
+    addgroup -g 1000 -S www-data ; \
+    adduser -u 1000 -D -S -G www-data www-data && exit 0 ; exit 1
 
 ARG PHP_UPSTREAM_CONTAINER=php-fpm
 ARG PHP_UPSTREAM_PORT=9000
