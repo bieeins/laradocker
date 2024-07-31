@@ -1877,6 +1877,19 @@ RUN if [ ${INSTALL_GITHUB_CLI} = true ]; then \
     && apt install gh -y \
 ;fi
 
+###########################################################################
+# SSH ALLOW:
+###########################################################################
+
+ARG INSTALL_ALLOW_SSH=false
+
+USER root
+RUN if [ ${INSTALL_ALLOW_SSH} = true ]; then \
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
+    echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
+    echo 'root:rootpassword' | chpasswd \
+;fi
+
 
 #
 #--------------------------------------------------------------------------
@@ -1893,3 +1906,5 @@ RUN apt-get clean && \
 
 # Set default work directory
 WORKDIR /var/www
+
+#EXPOSE 22

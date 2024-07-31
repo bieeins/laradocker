@@ -334,6 +334,7 @@ services:
                 - INSTALL_POPPLER_UTILS=${WORKSPACE_INSTALL_POPPLER_UTILS}
                 - INSTALL_JDK=${WORKSPACE_INSTALL_JDK}
                 - INSTALL_GITHUB_CLI=${WORKSPACE_INSTALL_GITHUB_CLI}
+                - INSTALL_ALLOW_SSH=${WORKSPACE_INSTALL_ALLOW_SSH}
                 - http_proxy
                 - https_proxy
                 - no_proxy
@@ -489,24 +490,24 @@ services:
     ####################################################################################################
     # VSFTPD
     ####################################################################################################
-    vsftpd:
-        build:
-        # image: fauria/vsftpd
-            context: .docker/vsftpd
-        # container_name: vsftpd
-        ports:
-            - "20:20"
-            - "21:21"
-            - "21100-21110:21100-21110"
-        environment:
-            FTP_USER: "usrFTP"
-            FTP_PASS: "passFTP"
-            PASV_ADDRESS: "103.10.169.86"
-        volumes:
-            - ${APP_CODE_PATH_HOST}:/home/vsftpd/dataku.my.id/
-        # command: /bin/sh -c "sed -i 's|#local_root=|local_root=/home/vsftpd/dataku.my.id|' /etc/vsftpd/vsftpd.conf && \ vsftpd /etc/vsftpd/vsftpd.conf"
-        networks:
-            - backend
+    # vsftpd:
+    #     build:
+    #     # image: fauria/vsftpd
+    #         context: .docker/vsftpd
+    #     # container_name: vsftpd
+    #     ports:
+    #         - "20:20"
+    #         - "21:21"
+    #         - "21100-21110:21100-21110"
+    #     environment:
+    #         FTP_USER: "usrFTP"
+    #         FTP_PASS: "passFTP"
+    #         PASV_ADDRESS: "103.10.169.86"
+    #     volumes:
+    #         - ${APP_CODE_PATH_HOST}:/home/vsftpd/dataku.my.id/
+    #     # command: /bin/sh -c "sed -i 's|#local_root=|local_root=/home/vsftpd/dataku.my.id|' /etc/vsftpd/vsftpd.conf && \ vsftpd /etc/vsftpd/vsftpd.conf"
+    #     networks:
+    #         - backend
 
 networks:
     frontend:
