@@ -116,7 +116,7 @@ services:
         links:
             - docker-in-docker
         deploy:
-            replicas: 5
+            replicas: 3
 
     ####################################################################################################
     # PHP Worker 
