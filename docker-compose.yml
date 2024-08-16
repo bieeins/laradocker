@@ -220,7 +220,7 @@ services:
             - .data/certbot/letsencrypt/:/var/www/letsencrypt
         environment:
             - ENV=production #change to 'production' to generate real certificates. 'staging' will by default dry run the request to prevent hitting rate limits during testing
-            - CN="dataku.my.id,solusiku.my.id,bks.my.id" #comma separated values of all the domains you wish to add ssl certificates on
+            - CN="dataku.my.id,solusiku.my.id,bks.my.id,bksdev.my.id,copas.my.id,restapi.my.id,gudang.my.id,hms.solusiku.my.id,adoctor.solusiku.my.id" #comma separated values of all the domains you wish to add ssl certificates on
             - EMAIL="bieeins@gmail.com"
         networks:
             - frontend
