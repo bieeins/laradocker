@@ -7,7 +7,7 @@
 ARG LARADOCK_PHP_VERSION
 FROM php:${LARADOCK_PHP_VERSION}-alpine
 
-LABEL maintainer="bks <bieeins@gmail.com>"
+LABEL maintainer="BKS <bieeins@gmail.com>"
 
 ARG LARADOCK_PHP_VERSION
 
@@ -649,6 +649,17 @@ ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
 # Check PHP version
 #--------------------------------------------------------------------------
 #
+
+###########################################################################
+# Set Timezone
+###########################################################################
+
+ARG TZ=UTC
+ENV TZ ${TZ}
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+###########################################################################
 
 RUN php -v | head -n 1 | grep -q "PHP ${PHP_VERSION}."
 
