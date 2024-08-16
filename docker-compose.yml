@@ -393,10 +393,12 @@ services:
             MYSQL_USER: ${MARIADB_USER}
             MYSQL_PASSWORD: ${MARIADB_PASSWORD}
         volumes:
-            - .docker/logs/master:/var/log/mysql/
-            - .docker/db/db_master_data:/var/lib/mysql
+            - ${MARIADB_HOST_LOG_PATH}/master:/var/log/mysql
+            - ${MARIADB_HOST_DATA_PATH}/db_master_data:/var/lib/mysql
+            # - .docker/logs/master:/var/log/mysql/
+            # - .docker/db/db_master_data:/var/lib/mysql
             - .docker/mysql/master/my.cnf:/etc/mysql/my.cnf
-            - .docker/db/sql/master:/docker-entrypoint-initdb.d
+            - .data/mariadb/sql/master:/docker-entrypoint-initdb.d
         ports:
             - ${MARIADB_REMOTE_PORT}:3306
         networks:
@@ -409,10 +411,12 @@ services:
             MYSQL_USER: ${MARIADB_USER}
             MYSQL_PASSWORD: ${MARIADB_PASSWORD}
         volumes:
-            - .docker/logs/slave1:/var/log/mysql
-            - .docker/db/db_slave1_data:/var/lib/mysql
+            - ${MARIADB_HOST_LOG_PATH}/slave1:/var/log/mysql
+            - ${MARIADB_HOST_DATA_PATH}/db_slave1_data:/var/lib/mysql
+            # - .docker/logs/slave1:/var/log/mysql
+            # - .docker/db/db_slave1_data:/var/lib/mysql
             - .docker/mysql/slave1/my.cnf:/etc/mysql/my.cnf
-            - .docker/db/sql/slave1:/docker-entrypoint-initdb.d
+            - .data/mariadb/sql/slave1:/docker-entrypoint-initdb.d
         networks:
             - backend
         depends_on:
@@ -425,10 +429,12 @@ services:
             MYSQL_USER: ${MARIADB_USER}
             MYSQL_PASSWORD: ${MARIADB_PASSWORD}
         volumes:
-            - .docker/logs/slave2:/var/log/mysql
-            - .docker/db/db_slave2_data:/var/lib/mysql
+            - ${MARIADB_HOST_LOG_PATH}/slave2:/var/log/mysql
+            - ${MARIADB_HOST_DATA_PATH}/db_slave2_data:/var/lib/mysql
+            # - .docker/logs/slave2:/var/log/mysql
+            # - .docker/db/db_slave2_data:/var/lib/mysql
             - .docker/mysql/slave2/my.cnf:/etc/mysql/my.cnf
-            - .docker/db/sql/slave2:/docker-entrypoint-initdb.d
+            - .data/mariadb/sql/slave2:/docker-entrypoint-initdb.d
         networks:
             - backend
         depends_on:
@@ -448,7 +454,7 @@ services:
             PMA_PORT: 3306
             PMA_ARBITRARY: 1
         volumes:
-            - .docker/phpmyadmin/sessions:/sessions
+            - .data/phpmyadmin/sessions:/sessions
         networks:
             - backend
 
@@ -482,7 +488,7 @@ services:
         image: redis:latest
         command: redis-server --appendonly yes
         volumes:
-            - .docker/redis/data:/data
+            - .data/redis/data:/data
         ports:
             - ${REDIS_PORT}:6379
         networks:
