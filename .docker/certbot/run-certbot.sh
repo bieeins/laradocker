@@ -37,7 +37,8 @@ do
 
     if [[ "$environment" == "production" ]]; then
         #for production    
-        letsencrypt certonly --webroot -w /var/www/letsencrypt -d $domain -d "www."$domain  --agree-tos --email $CONTACT --non-interactive --text
+        letsencrypt certonly --webroot -w /var/www/letsencrypt -d $domain  --agree-tos --email $CONTACT --non-interactive --text
+        # letsencrypt certonly --webroot -w /var/www/letsencrypt -d $domain -d "www."$domain  --agree-tos --email $CONTACT --non-interactive --text
 
         echo "copying certificates to server..."
 
@@ -49,7 +50,8 @@ do
 
     else
         #for testing
-        letsencrypt certonly --webroot -w /var/www/letsencrypt -d $domain -d "www."$domain  --agree-tos --email $CONTACT --non-interactive --text --dry-run
+        # letsencrypt certonly --webroot -w /var/www/letsencrypt -d $domain -d "www."$domain  --agree-tos --email $CONTACT --non-interactive --text --dry-run
+        letsencrypt certonly --webroot -w /var/www/letsencrypt -d $domain  --agree-tos --email $CONTACT --non-interactive --text --dry-run
     fi
 done
 #-----------------------------------------------------------------------
