@@ -1910,15 +1910,18 @@ RUN if [ ${INSTALL_ALLOW_VSCODE} = true ]; then \
   # echo "password: "${VSCODE_PASSWORD} >> /root/.config/code-server/config.yaml &&\
   echo "password: Rahasia007" >> /root/.config/code-server/config.yaml &&\
   echo "cert: false" >> /root/.config/code-server/config.yaml &&\
-  apt install fonts-firacode\
+  # Install fontconfig
+  apt-get update && apt-get install -y fontconfig && \
+  # Install Fira Code font manually
+  mkdir -p /usr/share/fonts/truetype/firacode && \
+  curl -fsSL https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip -o /tmp/firacode.zip && \
+  unzip /tmp/firacode.zip -d /tmp/firacode && \
+  cp /tmp/firacode/ttf/*.ttf /usr/share/fonts/truetype/firacode/ && \
+  fc-cache -fv && \
+  rm -rf /tmp/firacode /tmp/firacode.zip \
+  # apt install fonts-firacode\
   ;fi
 
-# CMD if [ ${INSTALL_ALLOW_VSCODE} = true ]; then \
-#     code-server --bind-addr 0.0.0.0:8081 --auth password; \
-# else \
-#     echo "VS Code Server is not installed."; \
-# fi
-#
 #--------------------------------------------------------------------------
 # Final Touch
 #--------------------------------------------------------------------------

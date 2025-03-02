@@ -360,6 +360,8 @@ services:
         - https_proxy
         - no_proxy
     volumes:
+      - vscode-extensions:/root/.local/share/code-server/extensions # Volume untuk ekstensi
+      - vscode-config:/root/.config/code-server # Volume untuk pengaturan global
       - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
       - docker-in-docker:/certs/client
       - .docker/php-worker/supervisord.d:/etc/supervisord.d
@@ -591,4 +593,8 @@ volumes:
   docker-in-docker:
     driver: ${VOLUMES_DRIVER}
   react:
+    driver: ${VOLUMES_DRIVER}
+  vscode-extensions:
+    driver: ${VOLUMES_DRIVER}
+  vscode-config:
     driver: ${VOLUMES_DRIVER}
